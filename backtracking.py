@@ -1,13 +1,13 @@
 import copy
-staticList = [[4, 2, 0, 0, 0, 3, 8, 0, 0],
-        [0, 0, 3, 4, 0, 0, 2, 7, 0],
-        [0, 8, 0, 0, 2, 5, 9, 3, 4],
-        [5, 0, 1, 0, 4, 0, 0, 0, 0],
-        [0, 0, 0, 5, 0, 7, 0, 0, 0],
-        [0, 0, 0, 0, 6, 0, 1, 0, 3],
-        [3, 1, 2, 8, 7, 0, 0, 4, 0],
-        [0, 5, 9, 0, 0, 4, 7, 0, 0],
-        [0, 0, 4, 9, 0, 0, 0, 6, 1]]
+staticList = [[1, 0, 0, 0, 5, 3, 7, 0, 6],
+              [0, 0, 6, 2, 7, 0, 0, 0, 0],
+              [0, 0, 0, 0, 4, 0, 5, 8, 2],
+              [0, 0, 0, 0, 0, 1, 0, 0, 8],
+              [7, 4, 5, 6, 0, 2, 3, 1, 9],
+              [9, 0, 0, 7, 0, 0, 0, 0, 0],
+              [2, 9, 4, 0, 6, 0, 0, 0, 0],
+              [0, 0, 0, 0, 1, 9, 6, 0, 0],
+              [8, 0, 1, 4, 2, 0, 0, 0, 7]]
 
 for i in range(9):
     try:
@@ -56,7 +56,7 @@ def rowSearch(firstIndex,searchValue,boardList):
     return True
 def findEmptyIndex(boardList,currentPoint):
     foundIndex = False
-    if currentPoint[1] == 9:
+    if currentPoint[1] == 0:
         currentPoint[0] -= 1
         currentPoint[1] = 0
     else:
@@ -65,23 +65,31 @@ def findEmptyIndex(boardList,currentPoint):
         if boardList[currentPoint[0]][currentPoint[1]] != 0:
             if currentPoint[1] == 0:
                 currentPoint[0] -= 1
-                currentPoint[1] = 9
+                currentPoint[1] = 8
             else:
                 currentPoint[1] -= 1
         else:
             return currentPoint
+
+
 while validEntry == False:
+    #if the current cell is not zero, then go back one cell and continue until it is 0
     if(staticList[activeIndex[0]][activeIndex[1]] != 0):
-        if activeIndex[1] == 9: #at the end of a row
+        if activeIndex[1] == 8: #at the end of a row
             activeIndex[0] += 1
             activeIndex[1] = 0
         else:
             activeIndex[1] += 1
         continue
+    #checks the current searchvalue through the search functions
     if not boxSearch(activeIndex, activeSearch, activeList) or not columnSearch(activeIndex,activeSearch,activeList) or not rowSearch(activeIndex,activeSearch,activeList):
-        if activeSearch == 9:
-            activeIndex = findEmptyIndex(staticList,activeIndex)
+        #if one of the searches failed IE Invalid Number
+
+        if activeSearch == 9: #if the current search term is a 9(IE reached the end of possibilities for current cell)
+            activeList[activeIndex[0]][activeList[1]] = 0
+            activeIndex = findEmptyIndex(staticList,activeIndex) #call function to find last original empty cell.
             while activeList[activeIndex[0]][activeIndex[1]] == 9:
+                activeList[activeIndex[0]][activeIndex[1]] = 0
                 activeIndex = findEmptyIndex(staticList,activeIndex)
             activeSearch = activeList[activeIndex[0]][activeIndex[1]] + 1
         else:
@@ -89,9 +97,11 @@ while validEntry == False:
     else:
         activeList[activeIndex[0]][activeIndex[1]] = activeSearch
         activeSearch = 1
-        if activeIndex[1] == 9:  # at the end of a row
+        if activeIndex[1] == 8:  # at the end of a row
             activeIndex[0] += 1
             activeIndex[1] = 0
         else:
             activeIndex[1] += 1
-    print(activeList)
+    for each in activeList:
+        print(each)
+    print("")

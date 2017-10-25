@@ -3,15 +3,15 @@ import cv2, numpy as np
 from PIL import Image
 topLeftLocation = pyautogui.locateCenterOnScreen("TopLeft.png")
 bottomRightLocation = pyautogui.locateCenterOnScreen("BottomRight.png")
-sudokuGrid = [[[],[],[],[],[],[],[],[],[]],
-              [[],[],[],[],[],[],[],[],[]],
-              [[],[],[],[],[],[],[],[],[]],
-              [[],[],[],[],[],[],[],[],[]],
-              [[],[],[],[],[],[],[],[],[]],
-              [[],[],[],[],[],[],[],[],[]],
-              [[],[],[],[],[],[],[],[],[]],
-              [[],[],[],[],[],[],[],[],[]],
-              [[],[],[],[],[],[],[],[],[]]]
+sudokuGrid = [[0,0,0,0,0,0,0,0,0],
+              [0,0,0,0,0,0,0,0,0],
+              [0,0,0,0,0,0,0,0,0],
+              [0,0,0,0,0,0,0,0,0],
+              [0,0,0,0,0,0,0,0,0],
+              [0,0,0,0,0,0,0,0,0],
+              [0,0,0,0,0,0,0,0,0],
+              [0,0,0,0,0,0,0,0,0],
+              [0,0,0,0,0,0,0,0,0]]
 
 print("Puzzle Location: ",topLeftLocation,bottomRightLocation)
 size = 300,300
@@ -19,7 +19,7 @@ im = pyautogui.screenshot(imageFilename="my_screenshot.png",region=(topLeftLocat
 im2 = Image.open("my_screenshot.png")
 im2.thumbnail(size,Image.ANTIALIAS)
 im2.save("my_screenshot.png","PNG")
-imageList = ["8"]
+imageList = ["1","2","3","4","5","6","7","8","9"]
 img_rgb = cv2.imread("my_screenshot.png")
 for index, imageIndex in enumerate(imageList):
     # Reads in the images into CV2 objects
@@ -31,7 +31,7 @@ for index, imageIndex in enumerate(imageList):
     print("Width - Height: " , w,h)
     #finds the images in the main image
     res = cv2.matchTemplate(img_gray,template,cv2.TM_CCOEFF_NORMED)
-    threshold = 0.8
+    threshold = 0.825
 
     loc = np.where(res >= threshold)
     print(loc)
@@ -45,7 +45,7 @@ for index, imageIndex in enumerate(imageList):
         for j in range(9):
             for k, location in enumerate(loc[1]):
                 if((location >= 6 + (33*i) and location <= 37 + (33*i)) and (loc[0][k] >= 1 + (33*j) and loc[0][k] <= 32 + (33*j))):
-                    sudokuGrid[j][i].append(index + 1)
+                    sudokuGrid[j][i] = index + 1
 
 print(sudokuGrid)
 cv2.imshow("output",img_rgb)
