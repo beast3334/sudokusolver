@@ -1,5 +1,6 @@
 import pyautogui
 import cv2, numpy as np
+from PIL import Image
 topLeftLocation = pyautogui.locateCenterOnScreen("TopLeft.png")
 bottomRightLocation = pyautogui.locateCenterOnScreen("BottomRight.png")
 sudokuGrid = [[[],[],[],[],[],[],[],[],[]],
@@ -13,10 +14,12 @@ sudokuGrid = [[[],[],[],[],[],[],[],[],[]],
               [[],[],[],[],[],[],[],[],[]]]
 
 print("Puzzle Location: ",topLeftLocation,bottomRightLocation)
-
+size = 300,300
 im = pyautogui.screenshot(imageFilename="my_screenshot.png",region=(topLeftLocation[0],topLeftLocation[1],bottomRightLocation[0]-topLeftLocation[0],bottomRightLocation[1]-topLeftLocation[1] + 10))
-
-imageList = ["1","2","3","4","5","6","7","8","9"]
+im2 = Image.open("my_screenshot.png")
+im2.thumbnail(size,Image.ANTIALIAS)
+im2.save("my_screenshot.png","PNG")
+imageList = ["8"]
 img_rgb = cv2.imread("my_screenshot.png")
 for index, imageIndex in enumerate(imageList):
     # Reads in the images into CV2 objects
