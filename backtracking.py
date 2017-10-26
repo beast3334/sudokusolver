@@ -1,13 +1,13 @@
 import copy
-staticList = [[1, 0, 0, 0, 5, 3, 7, 0, 6],
-              [0, 0, 6, 2, 7, 0, 0, 0, 0],
-              [0, 0, 0, 0, 4, 0, 5, 8, 2],
-              [0, 0, 0, 0, 0, 1, 0, 0, 8],
-              [7, 4, 5, 6, 0, 2, 3, 1, 9],
-              [9, 0, 0, 7, 0, 0, 0, 0, 0],
-              [2, 9, 4, 0, 6, 0, 0, 0, 0],
-              [0, 0, 0, 0, 1, 9, 6, 0, 0],
-              [8, 0, 1, 4, 2, 0, 0, 0, 7]]
+staticList = [[0, 0, 8, 6, 3, 2, 0, 0, 1],
+              [0, 1, 0, 0, 4, 5, 0, 0, 7],
+              [0, 0, 2, 0, 9, 1, 5, 0, 0],
+              [6, 0, 0, 0, 7, 8, 0, 2, 0],
+              [0, 0, 7, 0, 0, 0, 8, 0, 0],
+              [0, 9, 0, 1, 2, 0, 0, 0, 5],
+              [0, 0, 3, 5, 8, 0, 6, 0, 0],
+              [5, 0, 0, 2, 1, 0, 0, 7, 0],
+              [2, 0, 0, 9, 6, 4, 3, 0, 0]]
 
 for i in range(9):
     try:
@@ -31,7 +31,7 @@ def boxSearch(firstIndex,searchValue,boardList):
     else:
         rowSearchIndex = 6
 
-    if(firstIndex[1] > 0 and firstIndex[1] < 4):
+    if(firstIndex[1] >= 0 and firstIndex[1] < 4):
         columnSearchIndex = 0
     elif(firstIndex[1] > 3 and firstIndex[1] < 6):
         columnSearchIndex = 3
@@ -54,15 +54,15 @@ def rowSearch(firstIndex,searchValue,boardList):
         if boardList[i][firstIndex[1]] == searchValue:
             return False
     return True
-def findEmptyIndex(boardList,currentPoint):
+def findEmptyIndex(staticList,currentPoint):
     foundIndex = False
     if currentPoint[1] == 0:
         currentPoint[0] -= 1
-        currentPoint[1] = 0
+        currentPoint[1] = 8
     else:
         currentPoint[1] -= 1
     while not foundIndex:
-        if boardList[currentPoint[0]][currentPoint[1]] != 0:
+        if staticList[currentPoint[0]][currentPoint[1]] != 0:
             if currentPoint[1] == 0:
                 currentPoint[0] -= 1
                 currentPoint[1] = 8
@@ -86,7 +86,7 @@ while validEntry == False:
         #if one of the searches failed IE Invalid Number
 
         if activeSearch == 9: #if the current search term is a 9(IE reached the end of possibilities for current cell)
-            activeList[activeIndex[0]][activeList[1]] = 0
+            activeList[activeIndex[0]][activeIndex[1]] = 0
             activeIndex = findEmptyIndex(staticList,activeIndex) #call function to find last original empty cell.
             while activeList[activeIndex[0]][activeIndex[1]] == 9:
                 activeList[activeIndex[0]][activeIndex[1]] = 0

@@ -14,11 +14,11 @@ sudokuGrid = [[0,0,0,0,0,0,0,0,0],
               [0,0,0,0,0,0,0,0,0]]
 
 print("Puzzle Location: ",topLeftLocation,bottomRightLocation)
-size = 300,300
+size = (300,350)
 im = pyautogui.screenshot(imageFilename="my_screenshot.png",region=(topLeftLocation[0],topLeftLocation[1],bottomRightLocation[0]-topLeftLocation[0],bottomRightLocation[1]-topLeftLocation[1] + 10))
 im2 = Image.open("my_screenshot.png")
 im2.thumbnail(size,Image.ANTIALIAS)
-im2.save("my_screenshot.png","PNG")
+im2.save("my_screenshot2.png","PNG")
 imageList = ["1","2","3","4","5","6","7","8","9"]
 img_rgb = cv2.imread("my_screenshot.png")
 for index, imageIndex in enumerate(imageList):
@@ -31,7 +31,7 @@ for index, imageIndex in enumerate(imageList):
     print("Width - Height: " , w,h)
     #finds the images in the main image
     res = cv2.matchTemplate(img_gray,template,cv2.TM_CCOEFF_NORMED)
-    threshold = 0.825
+    threshold = 0.82
 
     loc = np.where(res >= threshold)
     print(loc)
