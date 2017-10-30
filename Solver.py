@@ -1,6 +1,7 @@
 import pyautogui
 import cv2, numpy as np
 from PIL import Image
+import BoardSolver
 topLeftLocation = pyautogui.locateCenterOnScreen("TopLeft.png")
 bottomRightLocation = pyautogui.locateCenterOnScreen("BottomRight.png")
 sudokuGrid = [[0,0,0,0,0,0,0,0,0],
@@ -20,7 +21,7 @@ im2 = Image.open("my_screenshot.png")
 im2.thumbnail(size,Image.ANTIALIAS)
 im2.save("my_screenshot2.png","PNG")
 imageList = ["1","2","3","4","5","6","7","8","9"]
-img_rgb = cv2.imread("my_screenshot.png")
+img_rgb = cv2.imread("my_screenshot2.png")
 for index, imageIndex in enumerate(imageList):
     # Reads in the images into CV2 objects
     img_gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
@@ -31,7 +32,7 @@ for index, imageIndex in enumerate(imageList):
     print("Width - Height: " , w,h)
     #finds the images in the main image
     res = cv2.matchTemplate(img_gray,template,cv2.TM_CCOEFF_NORMED)
-    threshold = 0.82
+    threshold = 0.825
 
     loc = np.where(res >= threshold)
     print(loc)
@@ -51,8 +52,26 @@ print(sudokuGrid)
 cv2.imshow("output",img_rgb)
 cv2.waitKey(0)
 
+#Start input onto webpage
+solvedBoard = BoardSolver.solveBoard(sudokuGrid)
+for i in range(9):
+    try:
+        firstIndex = [i,sudokuGrid[i].index(0)]
+        break
+    except:
+        pass
+print(firstIndex)
+pyautogui.click((topLeftLocation[0] + 25 + (31 * firstIndex[1]),topLeftLocation[1] + 25 + (31 * firstIndex[0])))
 
-
-
+for rowIndex, row in enumerate(sudokuGrid):
+    for columnIndex, column in enumerate(row):
+        if column != 0:
+            if not(rowIndex == 8 and columnIndex == 8):
+                pyautogui.press("tab")
+        else:
+            pyautogui.press(str(solvedBoard[rowIndex][columnIndex]))
+            if not(rowIndex == 8 and columnIndex == 8):
+                pyautogui.press("tab")
+pyautogui.press("enter")
 #Squares are 31 pixals long, starting at 6
 #Sqaures are 31 pixals long, starting at 1
